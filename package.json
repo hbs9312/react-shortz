@@ -1,0 +1,12 @@
+{
+  "name": "react-shortz",
+  "version": "1.0.0",
+  "description": "React 단축키 라이브러리",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
