@@ -4,7 +4,8 @@
   "description": "React 단축키 라이브러리",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsup"
   },
   "keywords": [],
   "author": "",
