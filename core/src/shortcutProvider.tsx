@@ -12,6 +12,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import {
   Shortcut,
@@ -30,26 +31,21 @@ export const ShortcutProvider = ({ children }: ShortcutProviderProps) => {
   const [inputModifiers, setInputModifiers] = useState<string[]>([]);
   const [inputCodes, setInputCodes] = useState<string[]>([]);
 
-  const addShortcut = useCallback(
-    (props: ShortcutProps) => {
-      const { key, callback, disabled, options } = props;
+  const addShortcut = useCallback((props: ShortcutProps) => {
+    const { key, callback, disabled, options } = props;
 
-      // override 옵션이 없으면 중복 체크
-      if (!options?.override) {
-        checkDuplicateShortcut(key);
-      }
+    // override 옵션이 없으면 중복 체크
+    // if (!options?.override) {
+    //   checkDuplicateShortcut(key);
+    // }
 
-      setShortcuts((prev) => [...prev, { key, callback, disabled, options }]);
-    },
-    [shortcuts]
-  );
+    setShortcuts((prev) => [...prev, { key, callback, disabled, options }]);
+  }, []);
 
-  const removeShortcut = useCallback(
-    (shortcut: Shortcut) => {
-      setShortcuts((prev) => prev.filter((s) => s.key !== shortcut.key));
-    },
-    [shortcuts]
-  );
+  const removeShortcut = useCallback((shortcut: Shortcut) => {
+    console.log("removeShortcut", shortcut.key);
+    setShortcuts((prev) => prev.filter((s) => s.key !== shortcut.key));
+  }, []);
 
   const checkDuplicateShortcut = (key: string) => {
     const isDuplicate = !!shortcuts.some((s) => s.key === key);
@@ -70,7 +66,7 @@ export const ShortcutProvider = ({ children }: ShortcutProviderProps) => {
         setInputCodes(newInputCodes);
       }
     },
-    [inputModifiers, inputCodes, shortcuts]
+    [inputModifiers, inputCodes]
   );
 
   // 키보드 입력 해제시 modifier, key 제거
@@ -108,12 +104,17 @@ export const ShortcutProvider = ({ children }: ShortcutProviderProps) => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [handleKeyDown, handleKeyUp]);
+
+  const contextValue = useMemo(
+    () => ({ shortcuts, addShortcut, removeShortcut }),
+    [shortcuts, addShortcut, removeShortcut]
+  );
+
+  // const memoizedChildren = useMemo(() => children, [children]);
 
   return (
-    <ShortcutContext.Provider
-      value={{ shortcuts, addShortcut, removeShortcut }}
-    >
+    <ShortcutContext.Provider value={contextValue}>
       {children}
     </ShortcutContext.Provider>
   );

@@ -1,3 +1,4 @@
+// 입력 언어, 브라우저 등에 따라 키 코드가 다르기 때문에 모든 키 코드를 정의 ex) ㅁ 과 a
 export const keyCodeMap: { [key: string]: string } = {
   // 영문
   KeyA: "a",
@@ -78,6 +79,7 @@ export const keyCodeMap: { [key: string]: string } = {
   MetaRight: "metaright",
 } as const;
 
+// 수정자 여부를 확인하기 위한 상수
 export const modifierKeys: string[] = [
   "shift",
   "control",
@@ -85,10 +87,16 @@ export const modifierKeys: string[] = [
   "meta",
 ] as const;
 
-export const ignoreTags: string[] = [
-  "input",
-  "textarea",
-  "select",
-  "button",
-  "a",
-] as const;
+export const isModifierKey = (key: string) => {
+  // 수정자 키 체크
+  return modifierKeys.includes(key.toLowerCase());
+};
+
+/**
+ * code를 key로 변환
+ * @param code - key code
+ * @returns key
+ */
+export const getKey = (code: string) => {
+  return keyCodeMap[code];
+};
