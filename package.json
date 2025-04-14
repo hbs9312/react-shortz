@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "React 단축키 라이브러리",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsup"
   },
   "keywords": [],
-  "author": "",
+  "author": "hbs9312",
   "license": "MIT",
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vite": "^6.2.5"
