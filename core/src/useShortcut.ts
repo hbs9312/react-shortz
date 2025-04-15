@@ -1,62 +1,66 @@
-import { useEffect, useState } from "react";
-import { ShortcutProps } from "./types";
-import { isSameSet } from "./utils/isSameSet";
-import { getKey, isModifierKey } from "./utils/keys";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { ShortcutProps } from "./types";
+import { checkValidKey, checkModifierKey, keyCodeMap } from "./utils/keys";
 
-// TODO: 윈도우 포커스 아웃 등과 같은 예상치 못한 이벤트에 대한 처리 필요
 // 단축키 등록
 export const useShortcut = (props: ShortcutProps) => {
-  // 일반키를 입력했을 때만 단축키를 실행하기 위해 수정자와 일반 키 별도로 관리
-  const [modifier, setModifier] = useState<string[]>([]);
-  const [key, setKey] = useState<string[]>([]);
+	const keyArray = useMemo(() => props.keys.split("+"), [props.keys]);
 
-  // input 등에서 기본적으로 기본동작을 막지 않아야 하기 때문에 preventDefault의 기본값 false
-  const preventDefault = props.options?.preventDefault ?? false;
+	// event.altKey 등 modifier 키 확인을 위한 객체
+	const modifiers = useMemo(
+		() => ({
+			alt: keyArray.includes("alt"),
+			ctrl: keyArray.includes("ctrl") || keyArray.includes("control"),
+			meta: keyArray.includes("meta"),
+			shift: keyArray.includes("shift"),
+		}),
+		[keyArray],
+	);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // TODO : input 태그 등 콜백함수가 실행되지 않아야하는 경우 boolean 값으로 분기처리
-    if (preventDefault) {
-      event.preventDefault();
-    }
-    if (event.repeat) return;
-    if (isModifierKey(event.key)) {
-      setModifier((prev) => [...prev, event.key.toLowerCase()]);
-    } else {
-      setKey((prev) => [...prev, getKey(event.code)]);
-    }
-  };
+	// modifier 키를 제외한 일반키 => 추후 연속키 고려하여 배열.
+	const normalKeys = useMemo(
+		() =>
+			keyArray.filter((key) => {
+				if (!checkValidKey(key)) {
+					throw new Error("Modifier key is not allowed");
+				}
 
-  const handleKeyUp = (event: KeyboardEvent) => {
-    if (event.repeat) return;
-    if (preventDefault) {
-      event.preventDefault();
-    }
-    if (isModifierKey(event.key)) {
-      setModifier((prev) =>
-        prev.filter((key) => key !== event.key.toLowerCase())
-      );
-    } else {
-      setKey((prev) => prev.filter((key) => key !== getKey(event.code)));
-    }
-  };
+				return !checkModifierKey(key);
+			}),
+		[keyArray],
+	);
 
-  useEffect(() => {
-    // 일반키를 입력했을 때에만 단축키 실행
-    if (key.length === 0) return;
-    // 단축키를 '+' 기준으로 분리
-    const shortcut = props.key.split("+");
-    // Set을 통해서 순서와 관계없이 입력 비교
-    if (isSameSet(new Set(shortcut), new Set([...modifier, ...key]))) {
-      props.callback();
-    }
-  }, [modifier, key]);
+	// 키 입력 이벤트 핸들러
+	const handleKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			if (event.repeat) return;
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
+			if (modifiers.alt && !event.altKey) return;
+			if (modifiers.ctrl && !event.ctrlKey) return;
+			if (modifiers.meta && !event.metaKey) return;
+			if (modifiers.shift && !event.shiftKey) return;
+
+			if (normalKeys.includes(keyCodeMap[event.code])) {
+				props.callback?.();
+			}
+		},
+		[modifiers, normalKeys, props.callback],
+	);
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyDown);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [handleKeyDown]);
 };
+
+/*
+	1. 키 등록
+		1) 문자열을 + 기준으로 분리
+		2) 분리된 문자열 중 유효한 키 인지 확인 -> KeyCode or ctlr, meta, shift, alt
+		3) 유효하지 않은 키가 포함되었다면 throw error
+		4) 수정자와 일반키를 별도로 관리
+	2. 키 입력
+
+*/
