@@ -1,7 +1,13 @@
-const DUPLICATE_KEY_ERROR = "Duplicate key Error"
 export class DuplicateKeyError extends Error {
-  constructor() {
-    super();
-    this.name = DUPLICATE_KEY_ERROR;
-  }
+	constructor() {
+		super();
+		this.name = "DuplicateKeyError";
+	}
+}
+
+export class InvalidKeyError extends Error {
+	constructor() {
+		super();
+		this.name = "InvalidKeyError";
+	}
 }
