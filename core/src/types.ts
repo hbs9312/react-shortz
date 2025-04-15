@@ -22,3 +22,8 @@ export type ShortcutContextType = {
 	addShortcut: (shortcut: ShortcutProps) => void;
 	removeShortcut: (shortcut: Shortcut) => void;
 };
+
+export type ShortcutRefProps = {
+	keys: string;
+	ref: React.RefObject<HTMLElement | null>;
+};
