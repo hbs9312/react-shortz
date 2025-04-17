@@ -1,11 +1,15 @@
-import type { ShortcutRefProps } from "./types";
 import { useShortcut } from "./useShortcut";
 
-export const useShortcutFocus = ({ keys, ref }: ShortcutRefProps) => {
-	useShortcut({
-		keys,
-		callback: () => {
-			ref.current?.focus();
-		},
-	});
+export type ShortcutFocusProps = {
+  keys: string;
+  ref: React.RefObject<HTMLElement | null>;
+};
+
+export const useShortcutFocus = ({ keys, ref }: ShortcutFocusProps) => {
+  useShortcut({
+    keys,
+    callback: () => {
+      ref.current?.focus();
+    },
+  });
 };
