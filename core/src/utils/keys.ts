@@ -103,7 +103,8 @@ export const checkModifierKey = (key: string) => {
  * @returns key
  */
 export const getKey = (code: string) => {
-  return keyCodeMap[code];
+  const key = keyCodeMap[code];
+  return key ? key : null;
 };
 
 /**
