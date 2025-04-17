@@ -98,19 +98,6 @@ export const checkModifierKey = (key: string) => {
 };
 
 /**
- * KeyboardEvent에서 수정자 키 반환
- * @param event - KeyboardEvent
- * @returns string | null
- */
-export const getModifierKey = (event: KeyboardEvent): string | null => {
-  if (event.ctrlKey) return "ctrl";
-  if (event.metaKey) return "meta";
-  if (event.shiftKey) return "shift";
-  if (event.altKey) return "alt";
-  return null;
-};
-
-/**
  * code를 key로 변환
  * @param code - key code
  * @returns key
