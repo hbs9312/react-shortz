@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { checkModifierKey, getKey } from "./keys";
+import { checkModifierKey, checkValidKey, getKey } from "./keys";
 
 describe("checkModifierKey()", () => {
   test("전달된 문자열이 수정자 키(ctrl, alt, shift, meta)인 경우 true를 반환한다.", () => {
@@ -27,5 +27,19 @@ describe("getKey()", () => {
     expect(getKey("Keyb")).toBeNull();
     expect(getKey("Digit10")).toBeNull();
     expect(getKey("equal")).toBeNull();
+  });
+});
+
+describe("checkValidKey()", () => {
+  test("전달된 키가 유효한 키인 경우 true를 반환한다.", () => {
+    expect(checkValidKey("a")).toBe(true);
+    expect(checkValidKey("ctrl")).toBe(true);
+    expect(checkValidKey("-")).toBe(true);
+  });
+
+  test("전달된 키가 유효하지 않은 키인 경우 false를 반환한다.", () => {
+    expect(checkValidKey("aa")).toBe(false);
+    expect(checkValidKey("10")).toBe(false);
+    expect(checkValidKey("ctrl+a")).toBe(false);
   });
 });
