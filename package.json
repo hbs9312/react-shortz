@@ -1,11 +1,21 @@
 {
-  "name": "react-shortz",
-  "version": "1.0.0",
+  "name": "react-shortcutz",
+  "version": "1.0.1",
   "description": "React 단축키 라이브러리",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsup",
