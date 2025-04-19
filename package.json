@@ -2,7 +2,9 @@
   "name": "react-shortz",
   "version": "1.0.0",
   "description": "React 단축키 라이브러리",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {
     "dev": "vite",
