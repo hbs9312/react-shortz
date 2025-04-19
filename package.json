@@ -6,6 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "homepage": "https://github.com/hbs9312/react-shortcutz",
   "files": [
     "./dist"
   ],
