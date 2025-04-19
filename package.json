@@ -12,6 +12,7 @@
   "author": "hbs9312",
   "license": "MIT",
   "devDependencies": {
+    "@types/testing-library__jest-dom": "^6.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
