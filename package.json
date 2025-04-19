@@ -1,6 +1,6 @@
 {
   "name": "react-shortcutz",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React 단축키 라이브러리",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
