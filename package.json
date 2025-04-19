@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
-    "test": "vitest"
+    "test": "vitest --coverage"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
